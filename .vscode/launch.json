@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [        
+        {
+            "type": "perl",
+            "request": "launch",
+            "name": "Perl-Debug local",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "exec": "perl",
+            "execArgs": [],
+            "root": "${workspaceRoot}/",
+            "inc": [],
+            "args": ["/Users/aarongardner/Documents/EDL Sample/Mac/EDL Test.txt"],
+            "env": {},
+            "stopOnEntry": true
+        },
+        {
+            "type": "perl",
+            "request": "launch",
+            "name": "Perl-Debug remote",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "root": "${workspaceRoot}/",
+            "stopOnEntry": true,
+            "port": 5000
+        }
+    ]
+}
