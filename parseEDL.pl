@@ -52,7 +52,7 @@ while (<$data>) {
             $time =~ s/\s//g;
         }
 
-        $edlContent{$currentItemId} = { "startTime" => $times[0], "endTime" => $times[1] };
+        $edlContent{$currentItemId} = { "startTime" => $times[2], "endTime" => $times[3] };
 
     }
 
