@@ -10,7 +10,7 @@
             "execArgs": [],
             "root": "${workspaceRoot}/",
             "inc": [],
-            "args": ["${workspaceFolder}/Test Data/181002 - Nina New.txt"],
+            "args": ["${workspaceFolder}/Test Data/EDL_Sample_01.txt"],
             "env": {},
             "stopOnEntry": true
         },
