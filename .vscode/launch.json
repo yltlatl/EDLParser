@@ -17,13 +17,13 @@
         {
             "type": "perl",
             "request": "launch",
-            "name": "Nina Fixed Line Endings 01",
+            "name": "Nina Example 02",
             "program": "${workspaceFolder}/${relativeFile}",
             "exec": "perl",
             "execArgs": [],
             "root": "${workspaceRoot}/",
             "inc": [],
-            "args": ["${workspaceFolder}/Test Data/181002 - Nina New_fixed.txt"],
+            "args": ["${workspaceFolder}/Test Data/EDL_Sample_02.txt"],
             "env": {},
             "stopOnEntry": true
         },
@@ -36,11 +36,24 @@
         "execArgs": [],
         "root": "${workspaceRoot}/",
         "inc": [],
-        "args": ["${workspaceFolder}/Test Data/181002 - Nina New.txt_output.txt"],
+        "args": ["${workspaceFolder}/Test Data/EDL_Sample_01.txt_output.txt"],
         "env": {},
         "stopOnEntry": true
     },
-        {
+    {
+        "type": "perl",
+        "request": "launch",
+        "name": "Nina QC 02",
+        "program": "${workspaceFolder}/${relativeFile}",
+        "exec": "perl",
+        "execArgs": [],
+        "root": "${workspaceRoot}/",
+        "inc": [],
+        "args": ["${workspaceFolder}/Test Data/EDL_Sample_02.txt_output.txt"],
+        "env": {},
+        "stopOnEntry": true
+    },
+    {
             "type": "perl",
             "request": "launch",
             "name": "Perl-Debug local",
