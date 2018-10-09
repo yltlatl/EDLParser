@@ -39,6 +39,7 @@ my @dataLines = <$data>;
 
 my $lineCount = scalar @dataLines;
 my $currentSourceFile;
+my $currentSourceFileLength;
 my @outputData;
 
 for (my $i = $lineCount - 1; $i >= 0; $i--) 
@@ -50,19 +51,25 @@ for (my $i = $lineCount - 1; $i >= 0; $i--)
     #get rid of any stray lfs
     $currentLine =~ s/\015//;
     
+    if ($currentLine =~ m/\*\sSOURCE FILE:\s(.*)$/)
+    {
+        #Need to delay unsetting our source file until we see a new one
+        $currentSourceFile = undef;
+        $currentSourceFileLength = undef;
 
-    #Matches exactly the pattern we are looking for
-    if ($currentLine =~ m/\*\sSOURCE FILE:\s(\w{2}_\w{3}\d{4})/)
-    {
-        $currentSourceFile = $1;
-    }
-    #Matches any other source file line and truncates to 10 characters
-    elsif ($currentLine =~ m/\*\sSOURCE FILE:\s(.*)$/)
-    {
-        $currentSourceFile = $1;
-        $currentSourceFile =~ tr/\r\n//d;
-        #truncate value to 10 characters
-        $currentSourceFile = substr $currentSourceFile, 0, 10;
+        #Matches exactly the pattern we are looking for
+        if ($currentLine =~ m/\*\sSOURCE FILE:\s(\w{2}_\w{3}\d{4})/)
+        {
+            $currentSourceFile = $1;
+        }
+        #Matches any other source file line and truncates to 10 characters
+        else
+        {
+            $currentSourceFile = $1;
+            $currentSourceFile =~ tr/\r\n//d;
+            #truncate value to 10 characters
+            $currentSourceFile = substr $currentSourceFile, 0, 10;
+        }
     }
 
     #skip BL lines
@@ -76,7 +83,7 @@ for (my $i = $lineCount - 1; $i >= 0; $i--)
     if ($currentLine =~ m/^(\d{3}\s+)(\w+)(\s+V\s+\w\s+)(.*)$/)
     {
         my $newSpaces = $3;
-        my $currentSourceFileLength = length $currentSourceFile;
+        $currentSourceFileLength = length $currentSourceFile;
         #if the source file name is too short, add spaces to the source file name as filler
         if ($currentSourceFileLength <= 8)
         {
@@ -95,8 +102,6 @@ for (my $i = $lineCount - 1; $i >= 0; $i--)
         }
 
         $currentLine = $1 . $currentSourceFile . $newSpaces . $4;
-        $currentSourceFile = undef;
-        $currentSourceFileLength = undef;
     }
 
     $dataLines[$i] = $currentLine;
