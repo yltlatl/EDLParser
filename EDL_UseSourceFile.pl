@@ -2,12 +2,14 @@
 use strict;
 use warnings;
 use File::Basename;
+use File::Copy;
 
 
 my $file = $ARGV[0] or die "Pass the name of the EDL to process as an argument to the script.\n";
- 
+
 open(my $data, '<', $file) or die "Could not open '$file' $!\n";
 
+#Decide which proper line endings we're going to use
 my $currentByte;
 my @newLineArray;
 
@@ -28,24 +30,33 @@ while (read($data,$currentByte,1))
     }
 
 }
-
 #set the record delimiter to whatever line breaks we have
 $/ = join '', @newLineArray;
 
+#start doing actual work
+seek $data, 0, 0;
+my @dataLines = <$data>;
 
-my @reverseData = reverse <$data>;
-my $lineCount = scalar @reverseData;
+my $lineCount = scalar @dataLines;
 my $currentSourceFile;
 my @outputData;
 
-for (my $i = 0; $i < $lineCount; $i++) 
+for (my $i = $lineCount - 1; $i >= 0; $i--) 
 {
-    my $currentLine = $reverseData[$i];
+    my $currentLine = $dataLines[$i];
 
+    chomp $currentLine;
+
+    #get rid of any stray lfs
+    $currentLine =~ s/\015//;
+    
+
+    #Matches exactly the pattern we are looking for
     if ($currentLine =~ m/\*\sSOURCE FILE:\s(\w{2}_\w{3}\d{4})/)
     {
         $currentSourceFile = $1;
     }
+    #Matches any other source file line and truncates to 10 characters
     elsif ($currentLine =~ m/\*\sSOURCE FILE:\s(.*)$/)
     {
         $currentSourceFile = $1;
@@ -57,40 +68,46 @@ for (my $i = 0; $i < $lineCount; $i++)
     #skip BL lines
     if ($currentLine =~ m/^(\d{3})\s+BL\s+/)
     {
+        $dataLines[$i] = $currentLine;
         next;
     }
 
+    #Matches record lines
     if ($currentLine =~ m/^(\d{3}\s+)(\w+)(\s+V\s+\w\s+)(.*)$/)
     {
         my $newSpaces = $3;
         my $currentSourceFileLength = length $currentSourceFile;
         #if the source file name is too short, add spaces to the source file name as filler
-        if ($currentSourceFileLength < 8)
+        if ($currentSourceFileLength <= 8)
         {
             my $missingSpaces = 8 - $currentSourceFileLength;
             $currentSourceFile = $currentSourceFile . (" " x $missingSpaces);
         }
         #otherwise, make sure the overall string is not too long
         #strings that don't match the pattern should already be truncated to 10 characters
+        elsif ($currentSourceFileLength == 9)
+        {
+            $newSpaces = substr $3, 0, -1;
+        }
         else
         {
             $newSpaces = substr $3, 0, -2;
         }
 
-        $reverseData[$i] = $1 . $currentSourceFile . $newSpaces . $4;
+        $currentLine = $1 . $currentSourceFile . $newSpaces . $4;
         $currentSourceFile = undef;
         $currentSourceFileLength = undef;
     }
 
-}
+    $dataLines[$i] = $currentLine;
 
-my @regularData = reverse @reverseData;
+}
 
 my ($name, $dirs, $suffix) = fileparse($ARGV[0]);
 my $outputFile = $dirs . $name . "_output.txt";
 open (my $output, ">", $outputFile) or die "Can't open output file $outputFile";
 
-foreach my $line (@regularData)
+foreach my $line (@dataLines)
 {
-    print $output $line;
+    print $output "$line\n\n";
 }

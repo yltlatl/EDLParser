@@ -34,12 +34,11 @@ while (read($data,$currentByte,1))
 $/ = join '', @newLineArray;
 
 my $errorCount = 0;
-my $lineCount = 0;
+my $lineCount = 1;
 
 while (my $line = <$data>) {
     $lineCount++;
     my $lineSubstr = substr $line, 0, 10;
-    print STDOUT "counter: $. - myCounter: $lineCount - line: $lineSubstr\n";
 
     if ($line =~ m/^\d{3}/)
     {
