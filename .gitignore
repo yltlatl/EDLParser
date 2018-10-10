@@ -35,3 +35,6 @@ inc/
 /*.zip
 settings.json
 .dat07f2.005
+
+#ignore custom bin
+/bin
