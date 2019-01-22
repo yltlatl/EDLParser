@@ -58,7 +58,7 @@ for (my $i = $lineCount - 1; $i >= 0; $i--)
         $currentSourceFileLength = undef;
 
         #Matches exactly the pattern we are looking for
-        if ($currentLine =~ m/\*\sSOURCE FILE:\s(\w{2}_\w{3}\d{4})/)
+        if ($currentLine =~ m/\*\sSOURCE FILE:\s((\w{2}_\w{3}\d{5})|(\w{2}_\w{3}\d{4}))/)
         {
             $currentSourceFile = $1;
         }
@@ -95,6 +95,10 @@ for (my $i = $lineCount - 1; $i >= 0; $i--)
         elsif ($currentSourceFileLength == 9)
         {
             $newSpaces = substr $3, 0, -1;
+        }
+        elsif ($currentSourceFileLength == 11)
+        {
+            $newSpaces = substr $3, 0, -3;
         }
         else
         {
