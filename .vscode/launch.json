@@ -42,6 +42,19 @@
             "stopOnEntry": true
         },       
         {
+            "type": "perl",
+            "request": "launch",
+            "name": "Nina Example 04",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "exec": "perl",
+            "execArgs": [],
+            "root": "${workspaceRoot}/",
+            "inc": [],
+            "args": ["${workspaceFolder}/Test Data/EDL_Sample_04.txt"],
+            "env": {},
+            "stopOnEntry": true
+        },       
+        {
         "type": "perl",
         "request": "launch",
         "name": "Nina QC 01",
