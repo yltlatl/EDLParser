@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [        
+
         {
             "type": "perl",
             "request": "launch",
@@ -27,6 +28,19 @@
             "env": {},
             "stopOnEntry": true
         },
+        {
+            "type": "perl",
+            "request": "launch",
+            "name": "Nina Example 03",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "exec": "perl",
+            "execArgs": [],
+            "root": "${workspaceRoot}/",
+            "inc": [],
+            "args": ["${workspaceFolder}/Test Data/EDL_Sample_03.txt"],
+            "env": {},
+            "stopOnEntry": true
+        },       
         {
         "type": "perl",
         "request": "launch",
